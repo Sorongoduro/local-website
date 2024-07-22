@@ -16,7 +16,7 @@ const editPriceBtn = document.querySelectorAll('.edit-price')
 
 async function updateCont(contOriginal, cont, totalOriginal, total) {
     try {
-        const response = await fetch('https://local-website-db5f29074c0c.herokuapp.com/contador', {
+        const response = await fetch('https://local-api-822e4889e0cf.herokuapp.com/contador', {
             method: 'PUT',
             body: JSON.stringify({contador: contOriginal + cont, total: totalOriginal + total}),
             headers: {
