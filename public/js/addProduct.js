@@ -1,5 +1,5 @@
 const postForm = document.querySelector('.post-form')
-const url = 'http://localhost:3001/producto'
+const url = 'https://local-api-822e4889e0cf.herokuapp.com/producto'
 
 postForm.addEventListener('submit', (e) => {
     e.preventDefault()

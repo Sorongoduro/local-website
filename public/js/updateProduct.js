@@ -10,7 +10,7 @@ putForm.addEventListener('submit', (e) => {
     putDataJson.price = parseInt(putDataJson.price)
     putDataJson.quantity = parseInt(putDataJson.quantity)
     if(isNaN(putDataJson.price)) {
-        fetch('http://localhost:3001/producto', {
+        fetch('https://local-api-822e4889e0cf.herokuapp.com/producto', {
             method: 'PUT',
             body: JSON.stringify({name: putDataJson.name}),
             headers: {
@@ -21,7 +21,7 @@ putForm.addEventListener('submit', (e) => {
             const precioOriginal = producto.price
             putDataJson.price = precioOriginal
             console.log(putDataJson)
-            return fetch(`http://localhost:3001/producto`, {
+            return fetch(`https://local-api-822e4889e0cf.herokuapp.com/producto`, {
                 method: 'PUT',
                 body: JSON.stringify(putDataJson),
                 headers:{
@@ -30,7 +30,7 @@ putForm.addEventListener('submit', (e) => {
             })
         })
     } else if (isNaN(putDataJson.quantity)) {
-        fetch('http://localhost:3001/producto', {
+        fetch('https://local-api-822e4889e0cf.herokuapp.com/producto', {
             method: 'PUT',
             body: JSON.stringify({name: putDataJson.name}),
             headers: {
@@ -41,7 +41,7 @@ putForm.addEventListener('submit', (e) => {
             const cantidadOriginal = producto.quantity
             putDataJson.quantity = cantidadOriginal
             console.log(putDataJson)
-            return fetch(`http://localhost:3001/producto`, {
+            return fetch(`https://local-api-822e4889e0cf.herokuapp.com/producto`, {
                 method: 'PUT',
                 body: JSON.stringify(putDataJson),
                 headers:{
@@ -51,7 +51,7 @@ putForm.addEventListener('submit', (e) => {
         })
     }  else {
         console.log(putDataJson)
-        fetch(`http://localhost:3001/producto`, {
+        fetch(`https://local-api-822e4889e0cf.herokuapp.com/producto`, {
             method: 'PUT',
             body: JSON.stringify(putDataJson),
             headers:{

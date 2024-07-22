@@ -8,7 +8,7 @@ delForm.addEventListener('submit', (e) => {
     const delDataJson = Object.fromEntries(delData)
     delDataJson.name = capital
     console.log(delDataJson)
-    fetch(`http://localhost:3001/producto/`, {
+    fetch(`https://local-api-822e4889e0cf.herokuapp.com/producto`, {
         method: 'DELETE',
         body: JSON.stringify({name: delDataJson.name}),
         headers:{
