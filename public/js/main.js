@@ -74,7 +74,7 @@ async function processQueue() {
 // Función para actualizar el producto en el servidor
 async function updateProduct(productName, quantity) {
     try {
-        const response = await fetch('http://localhost:3001/producto', {
+        const response = await fetch('https://local-api-822e4889e0cf.herokuapp.com/producto', {
             method: 'PUT',
             body: JSON.stringify({name: productName, quantity: quantity}),
             headers: {
@@ -90,7 +90,7 @@ async function updateProduct(productName, quantity) {
 
 async function updateProductPrice(productName, price) {
     try {
-        const response = await fetch('http://localhost:3001/producto', {
+        const response = await fetch('https://local-api-822e4889e0cf.herokuapp.com/producto', {
             method: 'PUT',
             body: JSON.stringify({name: productName, price: price}),
             headers: {
