@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/metadata') %>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <title><%= title %></title>
+</head>
+<body>
+    <%- include('./partials/header') %>
+    <main>
+        <div class="main-ctn">
+            <div class="client-ctn">
+                <div class="cart">
+                        <% contador.forEach(cont => { %>
+                            <p data-total="<%= cont.total %>" class="total-vendidos">
+                                <strong>Total Vendido:</strong> <span class="total-vendido">$<%= cont.total %></span> 
+                            </p>
+                            <p data-cont="<%= cont.contador %>" class="productos-vendidos">
+                                <strong>Productos Vendidos:</strong> <span class="producto-vendido"><%= cont.contador %></span> 
+                            </p>
+                            <p class="promedio-text">
+                               <strong>Promedio:</strong>   <span class="promedio-ventas">$0</span>
+                            </p>
+                            <!-- <a class="promedio-btn bttn" href="">Calcular promedio</a> -->
+                        <% }) %>
+                </div>
+                <div class="transactions-ctn">
+                    
+                        
+                </div>
+            </div>
+            <div class="cards-ctn">
+                <div class="card rounded-0">
+                    <div class="card-props">
+                        <p><strong>Nombre:</strong></p>
+                        <p><strong>Precio:</strong></p>
+                        <p><strong>Cantidad:</strong></p>
+                    </div>
+                </div>
+                <% productos.forEach(producto => { %>
+                    <div class="card rounded-0">
+                        <div class="card-product" data-type="<%= producto.type %>">
+                            <!-- <div class="card-img">
+                                <img src='img/<%= producto.image %>'>
+                            </div> -->
+                            <div class="card-info">
+                                <h4 class="product-name"> <%= producto.name %></h4>
+                                <div class="price-ctn">
+                                    <p class="price-text"> <span class="price-element"> $<%= producto.price %></span></p>
+                                    <a href="#" class="edit-price" data-name="<%= producto.name %>">Editar</a>
+                                </div>
+                                <div class="quantity-ctn">
+                                    <p class="quantity-text"> <span class="quantity-element"><%= producto.quantity %></span></p>
+                                    <a href="#" class="edit-quantity"  data-name="<%= producto.name %>">Editar</a> 
+                                </div>
+                                <a href="#" class="add-btn bttn" data-name="<%= producto.name %>" data-price="<%= producto.price %>" data-quantity="<%= producto.quantity %>">Agregar</a>
+                            </div> 
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+
+        </div>
+
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

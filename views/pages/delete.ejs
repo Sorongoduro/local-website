@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/metadata') %>
+    <link rel="stylesheet" href="css/style.css">
+    <title><%= title %></title>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <form class="del-form">
+        <label>
+            Eliminar productos por nombre:
+            <input class="search-input name-input" name="name" type="text" placeholder="Nombre del producto">
+        </label>
+        <input  class="admin-del" type="submit" value="Enviar">
+    </form>
+    <script src="js/deleteProduct.js"></script>
+</body>
+</html>

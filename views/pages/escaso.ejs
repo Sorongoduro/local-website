@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/metadata') %>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/escaso.css">
+    <title><%= title %></title>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <% productos.forEach(producto => { %>
+        <% if (producto.quantity < 5) { %>
+            <div class="card">
+                <div class="card-img">
+                    <img src='img/<%= producto.image %>'>
+                </div>
+                <div class="card-info">
+                    <h2 class="product-name"> <%= producto.name %></h2>
+                    
+                    <p> <strong>Precio:</strong> <%= producto.price %> </p>
+                    <p> <strong>Cantidad:</strong> <%= producto.quantity %> </p>
+                </div>
+            </div>
+        <% } %>
+    <% }) %>
+</body>
+</html>

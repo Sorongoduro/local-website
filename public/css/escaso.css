@@ -1,0 +1,11 @@
+
+.card {
+    opacity: 1;
+    margin: 20px 0px;
+    align-items: center;
+    text-align: center;
+    background-color: rgb(216, 216, 216);
+    max-width: 20%;
+    padding: 30px;
+    border-radius: 15px;
+}
