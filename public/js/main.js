@@ -16,7 +16,7 @@ const editPriceBtn = document.querySelectorAll('.edit-price')
 
 async function updateCont(contOriginal, cont, totalOriginal, total) {
     try {
-        const response = await fetch('https://local-api-822e4889e0cf.herokuapp.com/contador', {
+        const response = await fetch('http://localhost:3001/contador', {
             method: 'PUT',
             body: JSON.stringify({contador: contOriginal + cont, total: totalOriginal + total}),
             headers: {
@@ -41,15 +41,11 @@ let total = 0;
 totalPrice.innerHTML = `<strong>Total:</strong> $${total}`;
 
 let cont = 0
-const valorProductosVendidos = parseInt(productosVendidosCtn.getAttribute('data-cont'))
-const valorTotalVendido = parseInt(totalVendidosCtn.getAttribute('data-total'))
+let valorProductosVendidos = parseInt(productosVendidosCtn.getAttribute('data-cont'))
+let valorTotalVendido = parseInt(totalVendidosCtn.getAttribute('data-total'))
 let promedio = valorTotalVendido / valorProductosVendidos
-if(isNaN(promedioVentas.textContent)) {
-    promedioVentas.textContent = `$0`
-} else {
-    promedioVentas.textContent = `$${parseFloat(promedio).toFixed(2)}`
+promedioVentas.textContent = `$${parseFloat(promedio).toFixed(2)}`
 
-}
 
 
 
@@ -59,6 +55,7 @@ const cartProducts = {};
 // Cola de operaciones
 const operationQueue = [];
 let isProcessing = false;
+
 
 // Función para procesar la cola de operaciones
 async function processQueue() {
@@ -74,7 +71,7 @@ async function processQueue() {
 // Función para actualizar el producto en el servidor
 async function updateProduct(productName, quantity) {
     try {
-        const response = await fetch('https://local-api-822e4889e0cf.herokuapp.com/producto', {
+        const response = await fetch('http://localhost:3001/producto', {
             method: 'PUT',
             body: JSON.stringify({name: productName, quantity: quantity}),
             headers: {
@@ -90,7 +87,7 @@ async function updateProduct(productName, quantity) {
 
 async function updateProductPrice(productName, price) {
     try {
-        const response = await fetch('https://local-api-822e4889e0cf.herokuapp.com/producto', {
+        const response = await fetch('http://localhost:3001/producto', {
             method: 'PUT',
             body: JSON.stringify({name: productName, price: price}),
             headers: {
@@ -143,40 +140,47 @@ function updateCartDisplay() {
     
 
     finishBtn.style.display = Object.keys(cartProducts).length > 0 ? 'inline-block' : 'none';
+        finishBtn.addEventListener('click', async e => {
+            e.preventDefault();
+            if (e.target.disabled) return;
+            e.target.disabled = true;
 
-    finishBtn.addEventListener('click', async e => {
-        e.preventDefault();
-        if (e.target.disabled) return;
-        e.target.disabled = true;
+   
+            await updateCont(valorProductosVendidos, cont, valorTotalVendido, total);
 
-        await updateCont(valorProductosVendidos, cont, valorTotalVendido, total)
+            let resultadoTotalVendido = valorTotalVendido + total;
+            let resultadoProductosVendidos = valorProductosVendidos + cont;
+            valorProductosVendidos = resultadoProductosVendidos
+            valorTotalVendido = resultadoTotalVendido
+            let promedio = resultadoTotalVendido / resultadoProductosVendidos;
+    
+            productosVendidos.textContent = `${resultadoProductosVendidos}`;
+            totalVendidos.textContent = `$${resultadoTotalVendido}`;
+            promedioVentas.textContent = `$${parseFloat(promedio).toFixed(2)}`;
 
-        let resultadoTotalVendido = valorTotalVendido + total
-        let resultadoProductosVendidos = valorProductosVendidos + cont
-        productosVendidos.textContent = `${resultadoProductosVendidos}`
-        totalVendidos.textContent = `$${resultadoTotalVendido}`
-        let promedio = resultadoTotalVendido / resultadoProductosVendidos
-        promedioVentas.textContent = `$${parseFloat(promedio).toFixed(2)}`
-
-        total = 0;
-        cont = 0;
-
+            // let resultadoTotalVendido = valorTotalVendido + total
+            // let resultadoProductosVendidos = valorProductosVendidos + cont
+            // let promedio = resultadoTotalVendido / resultadoProductosVendidos
+            // productosVendidos.textContent = `${resultadoProductosVendidos}`
+            // totalVendidos.textContent = `$${resultadoTotalVendido}`
+            // promedioVentas.textContent = `$${parseFloat(promedio).toFixed(2)}`
+            total = 0;
+            cont = 0;
+    
+            for (let key in cartProducts) {
+                delete cartProducts[key];
+            }
         
-        for (let key in cartProducts) {
-            delete cartProducts[key];
-        }
+            updateCartDisplay()
 
-
-        
-
-        totalPrice.innerHTML = `<strong>Total:</strong> $${0}`
-        const cartProductDiv = document.querySelectorAll('.product-ctn')
-        cartProductDiv.forEach(el => {
-            el.style.display = 'none'
+            // totalPrice.innerHTML = `<strong>Total:</strong> $${0}`
+            // const cartProductDiv = document.querySelectorAll('.product-ctn')
+            // cartProductDiv.forEach(el => {
+            //     el.style.display = 'none'
+            // })
+            finishBtn.style.display = 'none'  
         })
-        finishBtn.style.display = 'none'
 
-    });
 
 }
 
@@ -188,7 +192,7 @@ function updateCartDisplay() {
 // })
 
 // Función para manejar la eliminación de productos
-function handleDelete(e, productName, data,) {
+function handleDelete(e, productName, data) {
     e.preventDefault();
     if (e.target.disabled) return;
     e.target.disabled = true;
