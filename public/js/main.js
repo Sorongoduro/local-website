@@ -231,7 +231,7 @@ addBtn.forEach(button => {
         button.disabled = true;
         const addBtnCtn = button.closest('.add-btn-ctn');
         const productQuantElement = addBtnCtn.parentElement.querySelector('.quantity-element');
-        let realQuantity = parseInt(productQuantElement.textContent);
+        realQuantity = parseInt(productQuantElement.textContent);
         const productName = button.getAttribute('data-name');
         const productPrice = button.getAttribute('data-price');
 
