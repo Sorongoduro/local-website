@@ -175,3 +175,8 @@ form {
 .price-element, .quantity-element {
     margin-right: 10px;
 }
+
+.add-btn-ctn {
+    display: flex;
+}
+
