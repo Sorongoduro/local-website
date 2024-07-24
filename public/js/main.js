@@ -16,7 +16,7 @@ const editPriceBtn = document.querySelectorAll('.edit-price')
 
 async function updateCont(contOriginal, cont, totalOriginal, total) {
     try {
-        const response = await fetch('http://localhost:3001/contador', {
+        const response = await fetch('https://local-api-822e4889e0cf.herokuapp.com/contador', {
             method: 'PUT',
             body: JSON.stringify({contador: contOriginal + cont, total: totalOriginal + total}),
             headers: {
@@ -34,6 +34,7 @@ cart.appendChild(cartTitle);
 cartTitle.innerHTML = 'Total de productos:';
 
 
+const isActive = true
 
 const totalPrice = document.createElement('p');
 cart.appendChild(totalPrice);
@@ -60,7 +61,7 @@ let isProcessing = false;
 // Función para procesar la cola de operaciones
 async function processQueue() {
     if (isProcessing || operationQueue.length === 0) return;
-    
+
     isProcessing = true;
     const operation = operationQueue.shift();
     await operation();
@@ -71,7 +72,7 @@ async function processQueue() {
 // Función para actualizar el producto en el servidor
 async function updateProduct(productName, quantity) {
     try {
-        const response = await fetch('http://localhost:3001/producto', {
+        const response = await fetch('https://local-api-822e4889e0cf.herokuapp.com/producto', {
             method: 'PUT',
             body: JSON.stringify({name: productName, quantity: quantity}),
             headers: {
@@ -87,7 +88,7 @@ async function updateProduct(productName, quantity) {
 
 async function updateProductPrice(productName, price) {
     try {
-        const response = await fetch('http://localhost:3001/producto', {
+        const response = await fetch('https://local-api-822e4889e0cf.herokuapp.com/producto', {
             method: 'PUT',
             body: JSON.stringify({name: productName, price: price}),
             headers: {
@@ -222,46 +223,72 @@ function handleDelete(e, productName, data) {
     processQueue();
 }
 
+
 addBtn.forEach(button => {
     button.addEventListener('click', e => {
         e.preventDefault();
         if (button.disabled) return;
         button.disabled = true;
-        const productQuantElement = button.parentElement.querySelector('.quantity-element');
+        const addBtnCtn = button.closest('.add-btn-ctn');
+        const productQuantElement = addBtnCtn.parentElement.querySelector('.quantity-element');
         let realQuantity = parseInt(productQuantElement.textContent);
         const productName = button.getAttribute('data-name');
         const productPrice = button.getAttribute('data-price');
 
         if (realQuantity > 0) {
-            cont += 1
-            console.log(cont)
-            realQuantity -= 1;
-            productQuantElement.textContent = `${realQuantity}`;
+            
 
-            operationQueue.push(async () => {
-                await updateProduct(productName, realQuantity);
+            // realQuantity -= 1;
+            let inputQuantity = addBtnCtn.querySelector('input');
+            if (!inputQuantity) {
+                const inputQuantity = document.createElement('input');
+
+                inputQuantity.style.display = 'block'
+                inputQuantity.min = '1';
+                inputQuantity.max = realQuantity;
+                addBtnCtn.appendChild(inputQuantity);
+                inputQuantity.addEventListener('keypress', e => {
+                    if (e.key === 'Enter') {
+                        let abstractQuantity = parseInt(inputQuantity.value)
+                        if (!isNaN(abstractQuantity) && realQuantity >= abstractQuantity) {
+                            cont += abstractQuantity
+                            let updatedQuantity = realQuantity - abstractQuantity
+                            console.log(`Cantidad DOM: ${realQuantity}
+                                        Cantidad que se resta: ${abstractQuantity}
+                                        Total: ${updatedQuantity}`)
+                            productQuantElement.textContent = `${updatedQuantity}`;
+                            operationQueue.push(async () => {
+                                await updateProduct(productName, updatedQuantity);
+                                console.log('Se llamo a la cola')
+                                if (productName in cartProducts) {
+                                    cartProducts[productName].quantity += abstractQuantity;
+                                } else {
+                                    cartProducts[productName] = {
+                                        price: productPrice,
+                                        quantity: abstractQuantity
+                                    };
+                                }
                 
-                if (productName in cartProducts) {
-                    cartProducts[productName].quantity += 1;
-                } else {
-                    cartProducts[productName] = {
-                        price: productPrice,
-                        quantity: 1
-                    };
-                }
-
-                total += parseInt(productPrice);
-                updateCartDisplay();
-            });
-
-
-
-
-            processQueue();
+                                total += parseInt(productPrice*abstractQuantity);
+                                realQuantity = parseInt(productQuantElement.textContent)
+                                updateCartDisplay();
+                            });
+                        } else {
+                            console.error('No hay suficiente stock o el valor no es numerico')
+                        }
+                        processQueue()
+                        inputQuantity.value = ''
+                        inputQuantity.style.display = 'none'
+                    }
+                })
+                inputQuantity.focus();
+            } else {
+                inputQuantity.style.display = 'block'
+                inputQuantity.focus();
+            }
         } else {
             console.log("No hay suficiente producto");
         }
-
         button.disabled = false;
     });
 });
@@ -383,6 +410,7 @@ editPriceBtn.forEach(editButton => {
         }
     });
 })
+
 
 productsInput.addEventListener('input', event => {
     const inputValue = productsInput.value.toLowerCase();
